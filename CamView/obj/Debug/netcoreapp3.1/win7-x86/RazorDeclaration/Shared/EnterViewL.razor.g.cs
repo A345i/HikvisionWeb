@@ -90,7 +90,7 @@ using CamView.HelpClasses;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 100 "G:\NewFolder\Core_NET\GitProjects\testProject\CamView\Shared\EnterViewL.razor"
+#line 92 "G:\NewFolder\Core_NET\GitProjects\testProject\CamView\Shared\EnterViewL.razor"
        
 
     string _youCode = "";
