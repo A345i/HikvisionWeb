@@ -1,0 +1,48 @@
+﻿@using CamView.UsersGroups
+@using CamView.UsersGroupsComponents
+@inject IUserSettings usersetting
+
+
+@inject NavigationManager NavigationManager
+@inject UserData curentId
+
+@page "/cameralist"
+
+<div class="btn-group">
+    <button class="btn btn-sm btn-outline-primary" @onclick="@GoHome">
+        <span class="oi oi-home"></span>
+    </button>
+    <button class="btn btn-sm btn-outline-light" disabled>
+        &nbsp;
+    </button>
+    <button class="btn btn-sm btn-outline-info" @onclick="@GoUsers">
+        <span class="oi oi-people"></span>
+    </button>
+
+</div>
+
+
+<AllCamerasComponent /> 
+<br />
+<hr />
+<HostSettingComponent />
+
+@code {
+
+        protected override async Task OnInitializedAsync()
+        {
+            User usr=new User();
+            usr=await usersetting.GetUserFromId(curentId.IdData);
+            if (!usr.IsAdmin)
+            { GoHome(); }
+        }
+        void GoHome()
+        {
+            NavigationManager.NavigateTo(" /", false);
+        }
+        void GoUsers()
+        {
+            NavigationManager.NavigateTo(" /userlist", false);
+        }
+
+ }

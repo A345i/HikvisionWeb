@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UserSecretsId>56557783-06ed-47ab-b610-c3660f69a9d6</UserSecretsId>
+    <RuntimeIdentifier>win7-x86</RuntimeIdentifier>
+    <OutputType>WinExe</OutputType>
+  </PropertyGroup>
+
+ 
+
+	<ItemGroup>
+		<FrameworkReference Include="Microsoft.WindowsDesktop.App.WindowsForms" />
+	</ItemGroup>
+	
+  <ItemGroup>
+    <Folder Include="wwwroot\image\" />
+    <Folder Include="wwwroot\files\" />
+  </ItemGroup>
+	  
+
+</Project>

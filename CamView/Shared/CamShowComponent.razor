@@ -1,0 +1,71 @@
+﻿@using CamView.HelpClasses
+
+@implements IDisposable
+
+@inject ICamHelper cam
+
+<div class="text-center">
+    <img class="img-fluid" src="@img" />
+</div>
+
+
+
+@code {
+    [Parameter]
+    public string HostName { get; set; }
+    [Parameter]
+    public string UserName { get; set; }
+    [Parameter]
+    public string Password { get; set; }
+    [Parameter]
+    public string Chanel { get; set; } = "101";
+    [Parameter]
+    public bool Capture { get; set; } = false;
+    protected override async Task OnInitializedAsync()
+    {
+        await Timer();
+    }
+    public void Dispose()
+    {
+        Capture = false;
+        img = "/image/noise.gif";
+        GC.Collect();
+    }
+    string img = "/image/noise.gif";
+    string url = "http://192.168.1.250/ISAPI/Streaming/channels/101/picture?snapShotImageType=JPEG";
+    async Task ShowCamScreenShot()
+    {
+        url = "http://" + HostName + "/ISAPI/Streaming/channels/" + Chanel + "/picture?snapShotImageType=JPEG";
+        string curentBaseString = await cam.GetImageStringFromUrl(UserName, Password, url);
+        if (curentBaseString != "")
+        {
+            img = "data:image/jpeg;base64, " + curentBaseString;
+            StateHasChanged();
+        }
+        if (Capture)
+            await Timer();
+    }
+
+    #region Timer
+
+    private int _TimerInterval { get; set; } = 500;
+    async Task Timer()
+    {
+        await Task.Delay(_TimerInterval);
+        await AfterTime();
+    }
+    async Task AfterTime()
+    {
+        if (Capture)
+        {
+            await ShowCamScreenShot();
+        }
+        else
+        {
+            //await Timer();
+            await Task.CompletedTask;
+        }
+
+    }
+    #endregion
+}

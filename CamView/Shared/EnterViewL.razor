@@ -1,0 +1,142 @@
+﻿<div class="container">
+    <div class="row">
+        <div class="col text-center">
+           
+            <img class="img-fluid" src="/image/vniiz_sky_eye.jpg" />
+        </div>
+
+    </div>
+
+
+
+    <div class="row">
+        <div class="col justify-content-center">
+
+            <div class="input-group">
+                <input disabled class="form-control text-primary" type="@ViewType" value="@_youCode" />
+                <div class="input-group-append">
+                    <button class="btn btn-outline-primary float-right" type="button"
+                            @onclick="ShowCode">
+                        <span class="oi oi-eye"></span>
+                    </button>
+
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+@*Кнопки*@
+
+<div class="clearfix">&nbsp;</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <NumButton Numb="1" OnClickCallback="@((Action<string>)@AddToOtvet)" />
+        </div>
+        <div class="col">
+            <NumButton Numb="2" OnClickCallback="@((Action<string>)@AddToOtvet)" />
+        </div>
+        <div class="col">
+            <NumButton Numb="3" OnClickCallback="@((Action<string>)@AddToOtvet)" />
+        </div>
+    </div>
+</div>
+
+<div class="clearfix">&nbsp;</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <NumButton Numb="4" OnClickCallback="@((Action<string>)@AddToOtvet)" />
+        </div>
+        <div class="col">
+            <NumButton Numb="5" OnClickCallback="@((Action<string>)@AddToOtvet)" />
+        </div>
+        <div class="col">
+            <NumButton Numb="6" OnClickCallback="@((Action<string>)@AddToOtvet)" />
+        </div>
+    </div>
+</div>
+
+<div class="clearfix">&nbsp;</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <NumButton Numb="7" OnClickCallback="@((Action<string>)@AddToOtvet)" />
+        </div>
+        <div class="col">
+            <NumButton Numb="8" OnClickCallback="@((Action<string>)@AddToOtvet)" />
+        </div>
+        <div class="col">
+            <NumButton Numb="9" OnClickCallback="@((Action<string>)@AddToOtvet)" />
+        </div>
+    </div>
+</div>
+@*Кнопки*@
+
+<div class="clearfix">&nbsp;</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <NumButton Numb="0" OnClickCallback="@((Action<string>)@AddToOtvet)" />
+        </div>
+        <div class="col">
+            <NumButton Numb="#" OnClickCallback="@((Action<string>)@AddToOtvet)" />
+        </div>
+        <div class="col">
+            <NumButton Numb="*" OnClickCallback="@((Action<string>)@AddToOtvet)" />
+        </div>
+    </div>
+</div>
+
+<div class="clearfix">&nbsp;</div>
+
+@code {
+
+    string _youCode = "";
+    
+
+    string ViewType = "password";
+    Task ShowCode()
+    {
+        if (ViewType == "password")
+        {
+            ViewType = "input";
+        }
+        else
+        {
+            ViewType = "password";
+        }
+        return Task.CompletedTask;
+    }
+
+    [Parameter]
+    public EventCallback<string> OnClickCallback { get; set; }
+
+    void OnClick(ChangeEventArgs args)
+    {
+        _youCode = args.Value.ToString();
+        Check();
+    }
+
+    void Check()
+    {
+        OnClickCallback.InvokeAsync(_youCode);
+        
+    }
+
+    //добавить символ к ответу
+    private void AddToOtvet(string number)
+    {
+        _youCode += number;
+        Check();
+    }
+
+
+}

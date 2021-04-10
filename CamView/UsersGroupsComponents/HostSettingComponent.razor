@@ -1,0 +1,68 @@
+﻿@using CamView.UsersGroups
+@inject IUserSettings usersetting
+
+<div class="form-group">
+    <label class="text-dark" for="HostField">Адрес хоста</label>
+    <input type="text" class="form-control" id="HostField" placeholder="Добавьте адрес хоста" value="@_Host" @onchange="OnHost">
+</div>
+
+<div class="form-group">
+    <label class="text-dark" for="UNamField">Имя пользователя</label>
+    <input type="text" class="form-control" id="UNamField" placeholder="Добавьте имя пользователя" value="@_UserName" @onchange="OnUserName">
+</div>
+
+<div class="form-group">
+    <label class="text-dark" for="PassField">Пароль</label>
+    <input type="text" class="form-control" id="PassField" placeholder="укажите пароль" value="@_Password" @onchange="OnPassword">
+</div>
+
+<div class="row">
+    <div class="col">
+        <button class="btn btn-outline-dark" @onclick="SaveSetting">Сохранить</button>
+    </div>
+
+</div>
+
+
+@code {
+
+    public string _Host { get; set; }
+    public string _UserName { get; set; }
+    public string _Password { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await usersetting.Load();
+
+        _Host = await usersetting.GetHost();
+        _UserName = await usersetting.GetUserName();
+        _Password = await usersetting.GetPassword();
+    }
+
+    async Task SaveSetting()
+    {
+        await usersetting.Load();
+
+        await usersetting.UpdateHostSetting(_Host, _UserName, _Password);
+
+        await usersetting.Save();
+
+        await Task.CompletedTask;
+    }
+
+    void OnHost(ChangeEventArgs args)
+    {
+        _Host = args.Value.ToString();
+    }
+
+    void OnUserName(ChangeEventArgs args)
+    {
+        _UserName = args.Value.ToString();
+    }
+
+    void OnPassword(ChangeEventArgs args)
+    {
+        _Password = args.Value.ToString();
+    }
+
+}

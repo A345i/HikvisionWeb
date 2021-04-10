@@ -1,0 +1,98 @@
+﻿@using CamView.UsersGroups
+@inject IUserSettings usersetting
+@inject NavigationManager NavigationManager
+
+    <div class="row">
+        <div class="col">
+            <div class="list-group">
+                <button type="button" @onclick="@AddNew" class="list-group-item list-group-item-action list-group-item-info">
+                    <span class="oi oi-plus"></span><span class="oi oi-person"></span>
+                </button>
+                @foreach (User u in userListAll)
+                {
+                    @if (u.IsAdmin)
+                    {
+                        <button type="button" @onclick="@(e => EditUser(u.UserId))" class="list-group-item list-group-item-action list-group-item-success">
+                            @u.UserName
+                        </button>
+                    }
+                    else
+                    {
+                        <button type="button" @onclick="@(e => EditUser(u.UserId))" class="list-group-item list-group-item-action">
+                            @u.UserName
+                        </button>
+                    }
+
+
+                }
+
+            </div>
+        </div>
+    </div>
+
+@if (_ShowEdit)
+{
+<div class="modal fade show d-block" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+
+                <button type="button" class="close" @onclick="@OnShow" aria-label="Close">
+                    <span aria-hidden="true" class="text-dark">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col">
+                        <UserComponent CurentUser="_tUser" />
+                    </div>
+                    
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+}
+
+
+@code {
+
+    List<User> userListAll = new List<User>();
+
+    User _tUser = new User();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await usersetting.Load();
+        userListAll = await usersetting.GetUserList();
+
+    }
+
+    bool _ShowEdit = false;
+    Task OnShow()
+    {
+        if (_ShowEdit)
+        {
+            _tUser = new User();
+            _ShowEdit = false;
+        }
+
+        return Task.CompletedTask;
+    }
+
+    async Task EditUser(string _userID)
+    {
+        _tUser = await usersetting.GetUserFromId(_userID);
+        _ShowEdit = true;
+    }
+
+    Task AddNew()
+    {
+        _tUser = new User();
+        _ShowEdit = true;
+
+        return Task.CompletedTask;
+    }
+}

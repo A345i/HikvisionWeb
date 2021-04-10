@@ -1,0 +1,103 @@
+﻿@using CamView.UsersGroups
+
+@implements IDisposable
+
+@inject IUserSettings usersetting
+@inject IBrowserService bs
+
+@if (_Capture)
+{
+    <div class="row">
+        <div class="col">
+            <CamShowComponent HostName="@_HostName" UserName="@_UserName" Password="@_Password" Chanel="@_Chanel" Capture="@_Capture" />
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col">
+            <button type="button" class="btn btn-outline-secondary btn-lg btn-block" @onclick="StopCapture">Остановить</button>
+        </div>
+    </div>
+}
+
+<div class="row">
+    <div class="col">
+        <div class="list-group">
+
+            @foreach (CameraWork cm in CameraList)
+            {
+                if (_Chanel == cm.CameraChanel)
+                {
+                    <KeyBtn KeyClass="list-group-item list-group-item-action active" OnClickCallback="ChangeChanel" KeyVal="@cm.CameraName" Numb="@cm.CameraChanel" />
+                }
+                else
+                {
+                    <KeyBtn KeyClass="list-group-item list-group-item-action" OnClickCallback="ChangeChanel" KeyVal="@cm.CameraName" Numb="@cm.CameraChanel" />
+                }
+
+            }
+
+        </div>
+    </div>
+</div>
+
+
+
+@code {
+
+    [Parameter]
+    public List<CameraWork> CameraList { get; set; } = new List<CameraWork>();
+
+    public string _HostName { get; set; } = "";
+
+    public string _UserName { get; set; } = "";
+
+    public string _Password { get; set; } = "";
+
+    public string _Chanel { get; set; } = "102";
+
+    public bool _Capture { get; set; } = false;
+
+    [Parameter]
+    public EventCallback<string> OnClickCallback { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await usersetting.Load();
+
+        _HostName = await usersetting.GetHost();
+        _UserName = await usersetting.GetUserName();
+        _Password = await usersetting.GetPassword();
+    }
+
+    public void Dispose()
+    {
+        _Capture = false;
+
+        GC.Collect();
+    }
+
+    async Task ChangeChanel(string _ch)
+    {
+        _Chanel = _ch;
+        _Capture = true;
+
+        //LOG
+        await OnClickCallback.InvokeAsync("просмотр канала №" + _ch);
+
+        await bs.ScrollTop();
+
+    }
+
+    async Task StopCapture()
+    {
+        _Chanel = "102";
+        _Capture = false;
+
+        //LOG
+        await OnClickCallback.InvokeAsync("остановка просмотра");
+
+        await bs.ScrollTop();
+    }
+}

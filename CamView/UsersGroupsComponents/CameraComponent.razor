@@ -1,0 +1,80 @@
+﻿@using CamView.UsersGroups
+@inject IUserSettings usersetting
+
+<label class="text-dark" for="camNameField">Название камеры</label>
+<div class="input-group">
+    <input type="text" class="form-control" id="camNameField" placeholder="введите название камеры" value="@CurentCamera.CameraName" @onchange="OnCameraName">
+    <div class="input-group-append">
+        <button class="btn btn-outline-danger float-right" type="button"
+                @onclick="DeleteCamera">
+            <span class="oi oi-trash"></span>
+        </button>
+
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="text-dark" for="camChanelField">Канал камеры</label>
+    <input type="text" class="form-control" id="camChanelField" placeholder="Добавьте канал камеры" value="@CurentCamera.CameraChanel" @onchange="OnCameraChanel">
+</div>
+
+<div class="row">
+    <div class="col">
+        <button class="btn btn-outline-dark" @onclick="AddCamera">@uTmp</button>
+    </div>
+
+</div>
+
+
+@code {
+
+    [Parameter]
+    public Camera CurentCamera { get; set; }
+
+    protected override void OnInitialized()
+    {
+        CheckCurentCamera();
+    }
+
+    void CheckCurentCamera()
+    {
+        if (CurentCamera.CameraChanel != "")
+        {
+            uTmp = "Обновить";
+        }
+    }
+    string uTmp { get; set; } = "Создать";
+
+    async Task AddCamera()
+    {
+        await usersetting.AddCameraToList(CurentCamera);
+        await usersetting.Save();
+        CurentCamera = await usersetting.GetCameraFromChanel(CurentCamera.CameraChanel);
+
+        CheckCurentCamera();
+        await Task.CompletedTask;
+    }
+
+    async Task DeleteCamera()
+    {
+        if (CurentCamera.CameraChanel != "")
+        {
+            await usersetting.RemoveCameraFromList(CurentCamera);
+            await usersetting.Save();
+            CurentCamera = new Camera();
+        }
+
+        await Task.CompletedTask;
+    }
+
+    void OnCameraName(ChangeEventArgs args)
+    {
+        CurentCamera.CameraName = args.Value.ToString();
+    }
+
+    void OnCameraChanel(ChangeEventArgs args)
+    {
+        CurentCamera.CameraChanel = args.Value.ToString();
+    }
+
+}

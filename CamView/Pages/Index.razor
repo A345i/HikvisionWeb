@@ -1,0 +1,155 @@
+﻿@using System.Reflection
+@using System.IO
+@using CamView.UsersGroups
+@using CamView.UsersGroupsComponents
+@using CamView.Shared
+@inject NavigationManager NavigationManager
+@inject IUserSettings usersetting
+@inject UserData curentId
+
+@page "/"
+
+
+@if (!_viewScreen)
+{
+    @if (!nousers)
+    {
+        <EnterViewL OnClickCallback="(string s) => GetToOtvet(s)" />
+    }
+    else
+    {
+        <UserComponent CurentUser="@_tmpUser" />
+    }
+
+}
+else
+{
+    <Cameras CameraList="@WorkCameras" OnClickCallback="(string m) => AddLog(m)" />
+
+    @if (_tmpUser.IsAdmin)
+    {
+        <button class="btn btn-sm btn-outline-info" @onclick="@GoCameras">
+            <span class="oi oi-video"></span>
+        </button>
+    }
+
+    <div>
+        <span class="text-info">Здравствуйте</span>&nbsp;<span class="text-success">@_tmpUser.UserName</span>
+    </div>
+
+}
+
+
+
+@code {
+
+    GlobalUser glbUser = new GlobalUser();
+
+    List<CameraWork> WorkCameras = new List<CameraWork>();
+
+    User _tmpUser = new User();
+    bool nousers = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await usersetting.Load();
+
+        User usr = new User();
+        usr = await usersetting.GetUserFromId(curentId.IdData);
+        if (usr.UserId != "")
+        {
+            _tmpUser = usr;
+            if (_tmpUser.UserId != "")
+            {
+                glbUser = await usersetting.GetGlobalUser(_tmpUser);
+                curentId.IdData = _tmpUser.UserId;
+                _viewScreen = true;
+
+                await AddLog("Вход в систему");
+            }
+        }
+
+        if (WorkCameras.Count == 0)
+        {
+            GetWorkCamList(await usersetting.GetCameraList()); //+++
+        }
+
+        string _ptch = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+
+        if (File.Exists(_ptch + "\\ust.dat"))
+        {
+            nousers = false;
+        }
+        else
+        { nousers = true; }
+    }
+
+    private void GetWorkCamList(List<Camera> camList)
+    {
+        foreach (var c in camList)
+        {
+            CameraWork cw = new CameraWork();
+            cw.CameraCapture = false;
+            cw.CameraName = c.CameraName;
+            cw.CameraChanel = c.CameraChanel;
+            WorkCameras.Add(cw);
+        }
+    }
+
+    bool _viewScreen = false;
+
+    async Task GetToOtvet(string _code)
+    {
+        _tmpUser = await usersetting.GetUserByPass(_code);
+
+        if (_tmpUser.UserId != "")
+        {
+            glbUser = await usersetting.GetGlobalUser(_tmpUser);
+            curentId.IdData = _tmpUser.UserId;
+
+            _viewScreen = true;
+        }
+    }
+
+    void GoCameras()
+    {
+        NavigationManager.NavigateTo("/cameralist", false);
+    }
+
+
+    #region LOG
+
+    List<string> LogList = new List<string>();
+
+    async Task AddLog(string message)
+    {
+        if (_tmpUser.UserId != "")
+        {
+            string _ptch = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+
+            if (File.Exists(_ptch + "\\log.txt"))
+            {
+                LogList = File.ReadAllLines(_ptch + "\\log.txt").ToList();
+                string _msg = _tmpUser.UserName + " - " + message + " - " + GetDateString();
+                LogList.Add(_msg);
+                if (LogList.Count >= 50)
+                {
+                    File.WriteAllLines(_ptch + "\\log_" + GetDateString() + ".txt", LogList.ToArray());
+                    LogList.Clear();
+
+                }
+
+                File.WriteAllLines(_ptch + "\\log.txt", LogList.ToArray());
+            }
+        }
+
+        await Task.CompletedTask;
+    }
+
+    private string GetDateString()
+    {
+        return DateTime.Now.Year.ToString() + "_" + DateTime.Now.Month.ToString() + "_" + DateTime.Now.Day.ToString() + "_" + DateTime.Now.Hour.ToString() + "_" + DateTime.Now.Minute.ToString() + "_" + DateTime.Now.Second.ToString();
+    }
+
+    #endregion
+}

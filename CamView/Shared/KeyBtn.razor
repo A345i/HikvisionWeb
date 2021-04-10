@@ -1,0 +1,23 @@
+﻿<button type="button" class="@KeyClass" @onclick="@OnClick">@KeyVal</button>
+
+
+@code {
+
+    [Parameter]
+    public string KeyVal { get; set; }
+
+    [Parameter]
+    public string Numb { get; set; }
+
+    [Parameter]
+    public string KeyClass { get; set; } = "btn btn-outline-primary btn-lg";
+
+    [Parameter]
+    public EventCallback<string> OnClickCallback { get; set; }
+
+    void OnClick()
+    {
+        OnClickCallback.InvokeAsync(Numb);
+    }
+
+}

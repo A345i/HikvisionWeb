@@ -1,0 +1,163 @@
+﻿@using CamView.UsersGroups
+@using System.Text.Json
+@using System.IO
+@inject IUserSettings usersetting
+@inject NavigationManager NavigationManager
+
+<label class="text-dark" for="userNameField">Имя пользователя</label>
+<div class="input-group">    
+    <input type="text" class="form-control" id="userNameField" placeholder="введите имя пользователя" value="@CurentUser.UserName" @onchange="OnUserName">
+    <div class="input-group-append">
+        <button class="btn btn-outline-danger float-right" type="button"
+                @onclick="DeleteUser">
+            <span class="oi oi-trash"></span>
+        </button>
+
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="text-dark" for="userDescriptionField">Краткое описание пользователя</label>
+    <input type="text" class="form-control" id="userDescriptionField" placeholder="Добавьте краткое описание пользователя" value="@CurentUser.UserDescription" @onchange="OnUserDescription">
+</div>
+
+<label class="text-dark" for="userPasswordField">Код</label>
+<div class="input-group">
+
+    <input disabled type="text" class="form-control" id="userPasswordField" placeholder="Укажите код для доступа" value="@CurentUser.UserPassword" @onchange="OnUserPassword">
+    <div class="input-group-append">
+        <button class="btn btn-outline-dark" type="button"
+                @onclick="ShowKbtn">
+            <span class="oi oi-key"></span>
+        </button>
+
+    </div>
+</div>
+
+@if (_showKbtn)
+{
+    <div class="modal fade show d-block" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+
+                    <button type="button" class="close" @onclick="@ShowKbtn" aria-label="Close">
+                        <span aria-hidden="true" class="text-dark">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col">
+                            <EnterViewL OnClickCallback="(string s) => GetPass(s)" />
+                        </div>
+                        
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    
+}
+
+<div class="row">
+    <div class="col">
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" checked="@CurentUser.IsAdmin" @onchange="CheckAdmin" id="stoptorCheckf">
+            <label class="form-check-label text-danger" for="stoptorCheckf">
+                Администратор
+            </label>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col">
+        <button class="btn btn-outline-dark" @onclick="AddUser">@uTmp</button>
+    </div>
+    <div class="col">
+        <button class="btn btn-outline-info float-right" @onclick="GoHome">
+            <span class="oi oi-home"></span>
+        </button>
+    </div>
+</div>
+
+
+@code {
+    [Parameter]
+    public User CurentUser { get; set; }
+
+    bool _showKbtn = false;
+    void ShowKbtn()
+    { _showKbtn = !_showKbtn; }
+
+    protected override void OnInitialized()
+    {
+        CheckCurentUser();
+    }
+
+    void CheckCurentUser()
+    {
+        if (CurentUser.UserId != "")
+        {
+            uTmp = "Обновить";
+        }
+    }
+    string uTmp { get; set; } = "Создать";
+    //string TmpName { get; set; }="" ;
+    async Task AddUser()
+    {
+        await usersetting.AddUserToList(CurentUser);
+        await usersetting.Save();
+        CurentUser = await usersetting.GetUserFromId(CurentUser.UserId);
+        //TmpName =((User)await usersetting.GetUserFromId(CurentUser.UserId)).UserName;
+        CheckCurentUser();
+        await Task.CompletedTask;
+    }
+
+    async Task DeleteUser()
+    {
+        if (CurentUser.UserId != "")
+        {
+            await usersetting.RemoveUserFromList(CurentUser);
+            await usersetting.Save();
+            CurentUser = new User();
+        }
+
+        await Task.CompletedTask;
+    }
+
+    void GoHome()
+    {
+        NavigationManager.NavigateTo("/", true);
+    }
+
+
+    void OnUserName(ChangeEventArgs args)
+    {
+        CurentUser.UserName = args.Value.ToString();
+    }
+    void OnUserDescription(ChangeEventArgs args)
+    {
+        CurentUser.UserDescription = args.Value.ToString();
+    }
+    void OnUserPassword(ChangeEventArgs args)
+    {
+        CurentUser.UserPassword = args.Value.ToString();
+    }
+
+    async Task GetPass(string _code)
+    {
+        CurentUser.UserPassword = _code;
+        await Task.CompletedTask;
+
+    }
+
+    Task CheckAdmin()
+    {
+        CurentUser.IsAdmin = !CurentUser.IsAdmin;
+        return Task.CompletedTask;
+    }
+}
