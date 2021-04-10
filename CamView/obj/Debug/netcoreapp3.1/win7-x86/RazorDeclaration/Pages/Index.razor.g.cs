@@ -13,98 +13,98 @@ namespace CamView.Pages
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Components;
 #nullable restore
-#line 1 "G:\NewFolder\Core_NET\Blazor\CamViewer\CamView\_Imports.razor"
+#line 1 "G:\NewFolder\Core_NET\GitProjects\testProject\CamView\_Imports.razor"
 using System.Net.Http;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 2 "G:\NewFolder\Core_NET\Blazor\CamViewer\CamView\_Imports.razor"
+#line 2 "G:\NewFolder\Core_NET\GitProjects\testProject\CamView\_Imports.razor"
 using Microsoft.AspNetCore.Authorization;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 3 "G:\NewFolder\Core_NET\Blazor\CamViewer\CamView\_Imports.razor"
+#line 3 "G:\NewFolder\Core_NET\GitProjects\testProject\CamView\_Imports.razor"
 using Microsoft.AspNetCore.Components.Authorization;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 4 "G:\NewFolder\Core_NET\Blazor\CamViewer\CamView\_Imports.razor"
+#line 4 "G:\NewFolder\Core_NET\GitProjects\testProject\CamView\_Imports.razor"
 using Microsoft.AspNetCore.Components.Forms;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 5 "G:\NewFolder\Core_NET\Blazor\CamViewer\CamView\_Imports.razor"
+#line 5 "G:\NewFolder\Core_NET\GitProjects\testProject\CamView\_Imports.razor"
 using Microsoft.AspNetCore.Components.Routing;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 6 "G:\NewFolder\Core_NET\Blazor\CamViewer\CamView\_Imports.razor"
+#line 6 "G:\NewFolder\Core_NET\GitProjects\testProject\CamView\_Imports.razor"
 using Microsoft.AspNetCore.Components.Web;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 7 "G:\NewFolder\Core_NET\Blazor\CamViewer\CamView\_Imports.razor"
+#line 7 "G:\NewFolder\Core_NET\GitProjects\testProject\CamView\_Imports.razor"
 using Microsoft.JSInterop;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 8 "G:\NewFolder\Core_NET\Blazor\CamViewer\CamView\_Imports.razor"
+#line 8 "G:\NewFolder\Core_NET\GitProjects\testProject\CamView\_Imports.razor"
 using CamView;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 10 "G:\NewFolder\Core_NET\Blazor\CamViewer\CamView\_Imports.razor"
+#line 10 "G:\NewFolder\Core_NET\GitProjects\testProject\CamView\_Imports.razor"
 using CamView.HelpClasses;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 1 "G:\NewFolder\Core_NET\Blazor\CamViewer\CamView\Pages\Index.razor"
+#line 1 "G:\NewFolder\Core_NET\GitProjects\testProject\CamView\Pages\Index.razor"
 using System.Reflection;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 2 "G:\NewFolder\Core_NET\Blazor\CamViewer\CamView\Pages\Index.razor"
+#line 2 "G:\NewFolder\Core_NET\GitProjects\testProject\CamView\Pages\Index.razor"
 using System.IO;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 3 "G:\NewFolder\Core_NET\Blazor\CamViewer\CamView\Pages\Index.razor"
+#line 3 "G:\NewFolder\Core_NET\GitProjects\testProject\CamView\Pages\Index.razor"
 using CamView.UsersGroups;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 4 "G:\NewFolder\Core_NET\Blazor\CamViewer\CamView\Pages\Index.razor"
+#line 4 "G:\NewFolder\Core_NET\GitProjects\testProject\CamView\Pages\Index.razor"
 using CamView.UsersGroupsComponents;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 5 "G:\NewFolder\Core_NET\Blazor\CamViewer\CamView\Pages\Index.razor"
+#line 5 "G:\NewFolder\Core_NET\GitProjects\testProject\CamView\Pages\Index.razor"
 using CamView.Shared;
 
 #line default
@@ -119,7 +119,7 @@ using CamView.Shared;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 44 "G:\NewFolder\Core_NET\Blazor\CamViewer\CamView\Pages\Index.razor"
+#line 44 "G:\NewFolder\Core_NET\GitProjects\testProject\CamView\Pages\Index.razor"
        
 
     GlobalUser glbUser = new GlobalUser();
@@ -227,7 +227,7 @@ using CamView.Shared;
 
     private string GetDateString()
     {
-        return DateTime.Now.Year.ToString() + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Hour.ToString() + DateTime.Now.Minute.ToString() + DateTime.Now.Second.ToString();
+        return DateTime.Now.Year.ToString() + "_" + DateTime.Now.Month.ToString() + "_" + DateTime.Now.Day.ToString() + "_" + DateTime.Now.Hour.ToString() + "_" + DateTime.Now.Minute.ToString() + "_" + DateTime.Now.Second.ToString();
     }
 
     #endregion

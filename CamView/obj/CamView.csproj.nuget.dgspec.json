@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "G:\\NewFolder\\Core_NET\\Blazor\\CamViewer\\CamView\\CamView.csproj": {}
+    "G:\\NewFolder\\Core_NET\\GitProjects\\testProject\\CamView\\CamView.csproj": {}
   },
   "projects": {
-    "G:\\NewFolder\\Core_NET\\Blazor\\CamViewer\\CamView\\CamView.csproj": {
+    "G:\\NewFolder\\Core_NET\\GitProjects\\testProject\\CamView\\CamView.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "G:\\NewFolder\\Core_NET\\Blazor\\CamViewer\\CamView\\CamView.csproj",
+        "projectUniqueName": "G:\\NewFolder\\Core_NET\\GitProjects\\testProject\\CamView\\CamView.csproj",
         "projectName": "CamView",
-        "projectPath": "G:\\NewFolder\\Core_NET\\Blazor\\CamViewer\\CamView\\CamView.csproj",
+        "projectPath": "G:\\NewFolder\\Core_NET\\GitProjects\\testProject\\CamView\\CamView.csproj",
         "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
-        "outputPath": "G:\\NewFolder\\Core_NET\\Blazor\\CamViewer\\CamView\\obj\\",
+        "outputPath": "G:\\NewFolder\\Core_NET\\GitProjects\\testProject\\CamView\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Microsoft\\Xamarin\\NuGet\\",
